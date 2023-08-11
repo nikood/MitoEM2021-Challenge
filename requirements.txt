@@ -12,3 +12,7 @@ imageio
 tensorflow
 tensorboard
 tensorboardX
+SimpleITK
+torchsummary
+scipy
+malis
