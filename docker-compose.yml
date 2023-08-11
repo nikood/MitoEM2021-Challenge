@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+
+  mitoem:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: pycon
+    container_name: mitoem_challenger
+    command: python MitoEM2021/connectomics/utils/evaluation/iteration_eval.py
+    volumes:
+      - ./data/:/home/mitoem/data/
+      - ./MitoEM2021-Challenge/:/home/mitoem/MitoEM2021/
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+
+volumes:
+  data:
+    driver: local
+  MitoEM2021-Challenge:
+    driver: local
