@@ -25,7 +25,7 @@ def cal_infer(root_dir, model_id):
     https://github.com/Limingxing00/MitoEM2021-Challenge/blob/dddb388a4aab004fa577058b53c39266e304fc03/connectomics/engine/trainer.py#L423
     """
 
-    command = "/opt/conda/bin/python {}scripts/main.py --config-file\
+    command = "/miniconda/bin/python {}scripts/main.py --config-file\
                 {}configs/MitoEM/MitoEM-R-BC.yaml\
                 --inference\
                 --do_h5\
@@ -57,9 +57,9 @@ def cal_infer(root_dir, model_id):
     out = subprocess.run(command, shell=True)
     print(command, "\n |-------------| \n", out, "\n |-------------| \n")
 
-    command = "/opt/conda/bin/python {}connectomics/utils/evaluation/evaluate.py \
+    command = "/miniconda/bin/python {}connectomics/utils/evaluation/evaluate.py \
                  -gt \
-                 /braindat/lab/limx/MitoEM2021/MitoEM-H/MitoEM-H/human_val_gt.h5 \
+                 /home/mitoem/rat_validation.h5 \
                  -p \
                  {}outputs/inference_output/{:06d}_out_100_256_256_aug_0_pad_0.h5 \
              -o {}{:06d}".format(root_dir, root_dir, model_id, root_dir, model_id)
@@ -73,7 +73,7 @@ if __name__=="__main__":
     """
     Please note 
     1. Change the gt file! My gt file is in:
-    /braindat/lab/limx/MitoEM2021/MitoEM-H/MitoEM-H/human_val_gt.h5
+    /home/mitoem/rat_validation.h5
     2. Change configs/MitoEM/MitoEM-R-BC.yaml:
     'unet_residual_3d' for res-unet-r  and 'rsunet' for res-unet-h
     
@@ -85,8 +85,8 @@ if __name__=="__main__":
     import argparse
     parser = argparse.ArgumentParser(description="Model Inference.")
     parser.add_argument('--model', type=int, default=297000, help='index number of the model')
-    parser.add_argument('--root-path', type=str, default="/braindat/lab/limx/MitoEM2021/CODE/HUMAN/rsunet_retrain_297000_v2_biyelunwen", help='root dir path')
-    parser.add_argument('--gt-path', type=str, default="/braindat/lab/limx/MitoEM2021/MitoEM-H/MitoEM-H/human_val_gt.h5", help='root dir path')
+    parser.add_argument('--root-path', type=str, default="/home/mitoem/MitoEM2021", help='root dir path')
+    parser.add_argument('--gt-path', type=str, default="/home/mitoem/rat_validation.h5", help='root dir path')
     parser.add_argument('--ngpus', type=int, default=4, help='gpu number')
     parser.add_argument('--ncpus', type=int, default=8, help='cpu number')
     parser.add_argument('--bs', type=int, default=8, help='total batch size')
@@ -105,7 +105,7 @@ if __name__=="__main__":
     # validation stage: output h5
     # test stage: don't output h5
     for i in range(len(model_id)):
-        command = ["/opt/conda/bin/python {}scripts/main.py ".format(root_dir),
+        command = ["/miniconda/bin/python {}scripts/main.py ".format(root_dir),
                 "--config-file", "{}configs/MitoEM/MitoEM-R-BC.yaml".format(root_dir),
                 "--inference",
                 "--do_h5",
@@ -126,7 +126,7 @@ if __name__=="__main__":
         print(command, "\n |-------------| \n", out, "\n |-------------| \n")
         
 
-        command = ["/opt/conda/bin/python {}connectomics/utils/evaluation/evaluate.py".format(root_dir),
+        command = ["/miniconda/bin/python {}connectomics/utils/evaluation/evaluate.py".format(root_dir),
                  "-gt", args.gt_path,
                  "-p", "{}outputs/inference_output/{:06d}_out_{}_{}_{}_stride_{}_{}_{}_aug_{}_pad_0.h5".format(root_dir, model_id[i], 
                                                                                                  args.window_size[0], args.window_size[1], args.window_size[2],
